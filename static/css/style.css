@@ -1,0 +1,153 @@
+.control-button {
+  width: 16px;
+}
+
+#timeline_metadata::-webkit-scrollbar {
+  display: none;
+}
+
+#timeline_parent::-webkit-scrollbar {
+  display: none;
+}
+
+#progress_overflow::-webkit-scrollbar {
+  display: none;
+}
+#loop:focus {
+  outline: none;
+}
+#playpause:focus {
+  outline: none;
+}
+
+#add_row:focus {
+    outline: none;
+}
+#add_row{
+  /* border: none; */
+  background-color: rgb(64, 159, 255);
+  /* height: 30px; */
+  color: white;
+
+}
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid rgba(240, 240, 240);
+}
+
+.control_button  {
+  border:none;
+  outline: none !important;
+  width:40px;
+  background-color:white;
+  margin-bottom:5px;
+  border-radius: 3px
+}
+.btn:focus,.btn:active {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.deleteRow {
+  color: transparent;
+}
+.deleteRow:hover {
+  color: grey;
+}
+.zoomButton {
+  border: none;
+  width: 30px;
+  height: 30px;
+  /* padding: 6px 0px; */
+  margin-top: 5px;
+  border-radius: 15px;
+  font-size: 18px;
+  color:white;
+  /* text-align: center; */
+  background-color: rgb(64, 159, 255);
+}
+
+.controls {
+  width:100%;
+  height:8.0971659919028340080971659919028%; /* of figure's height */
+  position:relative;
+}
+
+.controls[data-state=hidden] {
+  display:none;
+}
+
+.controls[data-state=visible] {
+  display:block;
+}
+
+.controls > * {
+  float:left;
+  width:3.90625%;
+  height:100%;
+  margin-left:0.1953125%;
+  display:block;
+}
+
+.controls > *:first-child {
+  margin-left:0;
+}
+
+.controls .progress {
+  cursor:pointer;
+  width:75.390625%;
+}
+
+.controls button {
+  border:none;
+  cursor:pointer;
+  background:transparent;
+  background-size:contain;
+  background-repeat:no-repeat;
+}
+
+.controls button:hover, .controls button:focus {
+  opacity:0.5;
+}
+
+.controls progress {
+  display:block;
+  width:100%;
+  height:81%;
+  margin-top:0.125rem;
+  border:none;
+  color:#0095dd;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border-radius:2px;
+}
+
+.controls progress[data-state="fake"] {
+  background:#e6e6e6;
+  height:65%;
+}
+.controls progress span {
+  width:0%;
+  height:100%;
+  display:inline-block;
+  background-color:#2a84cd;
+}
+
+#parameter_canvas {
+  width: 100px;
+}
+
+
+
+/* *********************** */
+
+.importP {
+  color: red;
+}
+
+.tooltip {
+  opacity: 1;
+}

@@ -1,0 +1,62 @@
+.modal-content {
+   border-radius: 20px;
+}
+
+.modal-body {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+
+.modal-body h5 {
+   font-weight: normal;
+   width: 90%;
+   text-align: center;
+   /* color: ; */
+}
+
+.modal-body h6 {
+   font-weight: normal;
+}
+
+.modal-footer button {
+   border-radius: 8px;
+}
+
+.head-border {
+   border-bottom: none;
+}
+.foot-border {
+   border-top: none;
+}
+
+
+.gif-video {
+   margin-top: 10px;
+   width: 400px;
+}
+
+.modal-title {
+   text-align: center;
+}
+
+
+.instruction-bodies {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.kindaButton {
+   color: #007bff;
+}
+
+.kindaClose {
+   font-size: 1.5rem;
+   font-weight: 700;
+   line-height: 1;
+   color: #000;
+   opacity: 0.7;
+   text-shadow: 0 1px 0 #fff;
+}

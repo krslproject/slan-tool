@@ -1,0 +1,1063 @@
+{% load static %}
+
+<html lang="en">
+  <head>
+    <link rel="shortcut icon" href="{% static 'favicon.png' %}" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- <link href="{% static 'css/bootstrap/bootstrap.min.css' %}" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/keyboard.css' %}">
+    <title>Annotation Tool</title>
+  </head>
+  <body>
+    <div class="row" style="height: 10%; margin:0px; padding-left:10px;">
+      <div class="col-1 d-flex justify-content-center" style="padding: 10px">
+        <label for="file-input" >
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-plus-circle"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p>Add video</p>
+          </div>
+        </label>
+        <input type="file" id="file-input" class="custom-file-input" accept="video/*" style="display:none">
+      </div>
+
+      <div class="col-1  d-flex justify-content-center" style="padding: 10px">
+        <label for="openProject">
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-folder"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p>Open</p>
+          </div>
+        </label>
+        <input type="file" id="openProject" class="open-project" accept="text/plain" style="display:none">
+
+      </div>
+
+      <div class="col-1 d-flex justify-content-center" style="padding: 10px">
+        <a id="saveProject" >
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-save"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p>Save</p>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="col-1 d-flex justify-content-center" style="padding: 10px">
+        <label for="importButton" z>
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-download"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p>Import</p>
+          </div>
+        </label>
+        <input type="file" id="importButton" class="import-file" accept="json" style="display:none">
+      </div>
+
+      <div class="col-1 d-flex justify-content-center" style="padding: 10px">
+        <label for="upload" id="exportButton" data-toggle="modal" data-target="#exportModal" >
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-upload"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p>Export</p>
+          </div>
+        </label>
+      </div>
+
+      <div class="col-1 d-flex justify-content-center border-right" style="padding: 10px">
+        <label for="share">
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-share"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p>Share</p>
+          </div>
+        </label>
+      </div>
+
+      <!-- <div class="col-1 d-flex justify-content-center" style="padding: 10px">
+
+        <label for="scissors">
+          <div class="d-flex justify-content-center" style="padding-top: 25%">
+            <p style="color: grey">Annotate</p>
+          </div>
+        </label>
+      </div> -->
+
+      <div class="col-1 d-flex justify-content-center" style="padding: 10px">
+        <label for="scissors" id="annotateButton">
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-code-slash"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p id="AnnotateLabel">Annotate</p>
+          </div>
+        </label>
+      </div>
+
+      <!-- <div class="col-1 d-flex justify-content-center" style="padding: 10px">
+        <label for="scissors" id="scissorsButton">
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-scissors"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p id="SigningAreaLabel">Signing area</p>
+          </div>
+        </label>
+      </div>
+
+      <div class="col-1 d-flex justify-content-center" style="padding: 10px">
+        <label for="handshapes" id="handshapesButton">
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-hand-index"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p id="HandshapeLabel">Right Hand</p>
+          </div>
+        </label>
+      </div>
+
+      <div class="col-1 d-flex justify-content-center" style="padding: 10px">
+        <label for="handshapes" id="handshapesButton">
+          <div class="d-flex justify-content-center">
+            <i style="font-size:30px;" class="bi bi-hand-index" data-toggle="modal" data-target="#trimvideo"></i>
+          </div>
+          <div class="d-flex justify-content-center">
+            <p id="HandshapeLabel2">Left Hand</p>
+          </div>
+        </label>
+      </div> -->
+
+      <form method="post" id="myForm" action="/sdf">
+        {% csrf_token %}
+        <!-- <input name="csrfToken" value="{% csrf_token %}" type="hidden">
+        <input type=""    -->
+      </form>
+
+
+    </div>
+
+    <div class="row" style="height: 90vh; margin:0px">
+      <div class="col-9" style="background-color: #fcfcfc; margin:0px">
+
+        <div class="row justify-content-center" style="height: 40vh; margin:0px">
+          <video style="height:100%" id="current_video" controls >
+              <source id="source-video" type='video/mp4' src="{% static 'P3_S147_02.mp4' %}">
+              <!-- https://kslars.s3.eu-north-1.amazonaws.com/2020/resized_cropped_14_12_11_17_01-17-of-22.mp4"> -->
+              Upload a video
+              <!-- 2020/resized_cropped_14_12_11_17_01-17-of-22.mp4 -->
+                <!-- src="{% static 'video.mp4' %}" -->
+                <!-- <source src="{% static '02_10_2_03_02-1-of-16.mp4' %}" type='video/mp4'> -->
+          </video>
+
+        </div>
+        <div class="row" style="height:45vh; margin:0px">
+          <div class="col-12" style="height: 30px; padding-top: 10px; padding-bottom: 10px;">
+            <button id="loop" value="once" style="border:none; width:4%; background-color:rgb(200,200,200); margin-bottom:5px; border-radius: 3px;" >  <i class="bi bi-arrow-repeat"></i></button>
+            <button id="back1frame" class="control_button" type="button" data-state="play">  <img class="control-button" src='/media/minus-frame.png'></button>
+            <button id="playpause"  class="control_button" type="button" data-state="play">  <i class="bi bi-play-fill"></i></button>
+            <button id="forward1frame" class="control_button"  type="button" data-state="play" > <img class="control-button" src='/media/plus-frame.png'></button>
+            <tab></tab><tab></tab>
+            <button id="025speed" class="control_button"  type="button" data-state="025speed" >  0.25</button>
+            <button id="05speed" class="control_button"  type="button" data-state="05speed" >  0.5</button>
+            <button id="1speed" class="control_button"  type="button" data-state="1speed" >  1</button>
+          </div>
+          <div class='col-12'>
+            <!-- <h4 style='padding-top:5px; padding-bottom:5px; margin-bottom: 0px;'> Annotation tiers </h4> -->
+            <button id="stop" type="button" data-state="stop" hidden>Stop</button>
+
+            <!-- <div class="" style="height: 20px;"> -->
+
+            <canvas id="total_progressbar_pointer" >
+
+            </canvas>
+            <!-- </div> -->
+            <canvas id="total_progressbar" style="padding-left:5px; padding-right: 5px;" >
+
+            </canvas>
+            <div id="video-controls" class="controls" data-state="hidden" style="height:25px">  <!--   -->
+              <!-- <button id="loop" type="button" value="loop" style="border:none; width:4%; background-color:white; margin-bottom:5px; border-radius: 3px;" >  <i class="bi bi-arrow-repeat"></i></button>
+              <button id="playpause" type="button" data-state="play" style="border:none;  width:4.3%; background-color:white; ">  <i class="bi bi-play-fill"></i></button>
+              <button id="stop" type="button" data-state="stop" hidden>Stop</button> -->
+              <div class="row d-flex justify-content-center" style="width:17%; margin:0px;" >
+                <div class="col-6">
+                  <a id="total_timer">00:00:00</a>
+                </div>
+              </div>
+
+              <div class="progress" id="progress_overflow" style="width:83%; margin:0px; overflow: scroll;"> <!--   -->
+                <canvas id="subprogressbar_pointer" >
+
+                </canvas>
+              <!-- </div> -->
+              <canvas id="subprogressbar" style="padding-left:5px; padding-right: 5px;" >
+
+              </canvas>
+              <!-- <progress id="progress" value="0" min="0" >
+                  <span id="progress-bar"></span>
+                </progress> -->
+              </div>
+              <button id="mute" type="button" data-state="mute"  hidden>Mute/Unmute</button>
+              <button id="volinc" type="button" data-state="volup"  hidden>Vol+</button>
+              <button id="voldec" type="button" data-state="voldown"  hidden>Vol-</button>
+              <button id="fs" type="button" data-state="go-fullscreen" hidden>Fullscreen</button>
+            </div>
+          </div>
+
+          <!-- <div class='col-2'>
+            <button onclick="togglePlay()">
+          </div>
+
+          <div class='col-10'>
+            <input type="range" value="0" max="1" step="any"
+                   value:bind="percentComplete" style="width:60vw;" />
+          </div> -->
+          <div class="col-12" style="height:30vh">
+
+            <div class='row'  id="timeline_metadata" style="overflow: scroll; border: 1px solid gray; height:100%; margin:0px">
+              <div class="col-2" id="metadata_name" style="background-color:white; padding: 0px">
+                <!-- <div class="" style="height:40px; padding: 8px">
+                   <a>Parameter</a>
+                </div> -->
+              </div>
+              <div class="col-10" id="timeline_parent" style="position:relative; overflow: scroll; overflow-y: auto; padding: 0px; background-color: rgb(240, 240, 240);">
+                <div class="" id="metadata_timeline" style="position:relative; ">
+                  <canvas id="metadata_pointer_line" style="position: absolute; z-index: 1; pointer-events: none;"></canvas>
+
+                  <!-- <canvas id="tip" width=100 height=25></canvas> -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12">
+            <div class="row" >
+              <!-- style="padding-left:15px; padding-right:15px;"> -->
+              <div class="input-group mb-3 col-5" style="padding-top: 5px; padding-bottom: 5px; margin-bottom:0px;">
+                <select class="custom-select" id="tierType">
+                  <option value="" disabled selected>Tier type</option>
+                  <option value="segment">Segment</option>
+                  <option value="text">Text</option>
+                  <option value="handshape">Handshape</option>
+                </select>
+                <input type="text" id="row_name" class="form-control" placeholder="Tier name" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button id="add_row" class="btn btn-outline-secondary" type="button">Add tier</button>
+                </div>
+              </div>
+              <!-- <div class="col-4" style="padding-top: 5px; padding-bottom: 5px;">
+                <input type="text" id="row_name" placeholder="Row name"/>
+                <button id="add_row">Add row</button>
+              </div> -->
+              <div class="col-4"  style="padding-top: 5px; padding-bottom: 5px; margin-bottom:0px;">
+                <button type="button" class="btn" data-toggle="modal" data-target="#shortcuts" style="border: none; background-color: rgb(240,240,240); color: rgb(100,100,100); height: 38px;">
+                  Keyboard shortcuts
+                </button>
+                <button type="button" class="btn" data-toggle="modal" data-target="#quicktips" style="border: none; background-color: rgb(240,240,240); color: rgb(100,100,100); height: 38px;">
+                  Tips
+                </button>
+              </div>
+              <div class="col-4">
+                <div class="float-right">
+                  <button class="zoomButton" id="zoomOut">-</button>
+                  <button class="zoomButton" id="zoomIn">+</button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <div class="col-3" id="additionalVisualization" style="background-color: white;">
+        <div class="" style="height: 55vh; background-color: rgb(240,240,240); padding: 20px; overflow: scroll">
+          <div style="margin-bottom: 20px;">
+            <a style="text-decoration: inherit; font-size: 15px; color: rgb(150,150,150);"> Additional visualization </a>
+          </div>
+
+          <div class="row" id="additionalVisualizationRow">
+
+          </div>
+        </div>
+        <div class="" style="height: 30vh; background-color: rgb(240,240,240); margin-top:15px; padding: 20px" >
+          <div style="margin-bottom: 20px;">
+            <a style="text-decoration: inherit; font-size: 15px; color: rgb(150,150,150);"> Properties </a>
+          </div>
+          <p>Duration: <span id="metaduration"></span> </p>
+          <p>FPS: <span id="metafps"></span> </p>
+          <p>Resolution: <span id="metareso"></span> </p>
+        </div>
+
+
+      </div>
+
+      <div class="col-3" id="keyboard" style="background-color: #fff; display: none; height:90vh; overflow: scroll;">
+        <h4>Value editor </h4>
+        <!-- <a>Value</a> -->
+        <div class="row" id="textValueDiv" style="padding-left: 15px; padding-right: 15px;">
+          <div class="input-group mb-3">
+            <input type="text"  id="textValue" class="form-control" placeholder="Enter a value" aria-label="Value" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary"  id="textValueSave" type="button">Save</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="" id="handshapeValueDiv">
+          <div class="row" style="padding-left:15px; padding-right:15px;">
+            <div class="hand-div">
+              <img id="hand-value" src='/media/select.png'>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-primary" id="handshapeValueSave" name="button" style="background-color: rgb(64, 159, 255); margin-left:10px; margin-top:5px ">Save</button>
+            </div>
+          </div>
+
+          <!-- </div> -->
+          <br>
+          <button type="button" class="btn btn-outline-secondary" id="runAutamicRecognition" name="button">Automatic recognition</button>
+          <h6 style="padding-top:10px"> or choose a handshape </h6>
+          <br/>
+          <div style="height: 65vh; overflow: scroll; width: 100%">
+            <a>Fist</a>
+            <div class="row handshape-container">
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/fist_1_1.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/fist_1_2.png'>
+              </div>
+              <div class="hand-div" >
+                <img class="hand-keyboard" src='/media/fist_1_3.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/fist_1_4.png'>
+              </div>
+
+              <button type="button" class="btn btn-outline-secondary" name="moreKeyboardButton" style="margin-left: 5px;"value="fistmore" id="fistmore">more</button>
+              <!-- <div style="display:none; width: 100%" id="fistmore"> -->
+              <div class="hand-div" name="fistmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/fist_3_3.png'>
+              </div>
+              <div class="hand-div" name="fistmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/fist_3_5.png'>
+              </div>
+              <div class="hand-div" name="fistmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/fist_4_3.png'>
+              </div>
+              <div class="hand-div" name="fistmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/fist_5_1.png'>
+              </div>
+              <div class="hand-div" name="fistmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/fist_5_2.png'>
+              </div>
+              <div class="hand-div" name="fistmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/fist_5_3.png'>
+              </div>
+              <div class="hand-div" name="fistmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/fist_5_4.png'>
+              </div>
+              <div class="hand-div" name="fistmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/fist_5_5.png'>
+              </div>
+
+              <div name="fistmore" style="display:none;">
+                <button type="button" class="btn btn-outline-secondary" name="lessKeyboardButton" style="margin-left: 5px;"value="fistmore">less</button>
+              </div>
+              <!-- </div> -->
+            </div>
+            <a>One Finger</a>
+            <div class="row handshape-container">
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/hand5.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/hand6.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/hand7.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/hand8.png'>
+              </div>
+              <button type="button" class="btn btn-outline-secondary" name="moreKeyboardButton" style="margin-left: 5px;"value="onefingermore" id="onefingermore">more</button>
+              <!-- <div style="display:none; width: 100%" id="fistmore"> -->
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger5.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger6.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger7.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger8.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger9.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger10.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger11.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger12.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger13.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger14.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger15.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger16.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger17.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger18.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger19.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger20.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger21.png'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger22.jpg'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger23.jpg'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger24.jpg'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger25.jpg'>
+              </div>
+              <div class="hand-div" name="onefingermore" style="display:none;">
+                <img class="hand-keyboard" src='/media/onefinger26.jpg'>
+              </div>
+              <div name="onefingermore" style="display:none;">
+                <button type="button" class="btn btn-outline-secondary" name="lessKeyboardButton" style="margin-left: 5px;"value="onefingermore">less</button>
+              </div>
+            </div>
+            <a>Two Fingers nonspread</a>
+            <div class="row handshape-container">
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/hand9.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/hand10.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/hand11.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/hand12.png'>
+              </div>
+              <button type="button" class="btn btn-outline-secondary" name="moreKeyboardButton" style="margin-left: 5px;"value="twofingersnonspreadmore" id="twofingersnonspreadmore">more</button>
+              <!-- <div style="display:none; width: 100%" id="fistmore"> -->
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread5.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread6.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread7.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread8.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread9.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread10.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread11.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread12.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread13.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread14.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread15.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread16.png'>
+              </div>
+              <div class="hand-div" name="twofingersnonspreadmore" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersnonspread17.png'>
+              </div>
+              <div name="twofingersnonspreadmore" style="display:none;">
+                <button type="button" class="btn btn-outline-secondary" name="lessKeyboardButton" style="margin-left: 5px;"value="twofingersnonspreadmore">less</button>
+              </div>
+            </div>
+            <a>Two Fingers spread</a>
+            <div class="row handshape-container">
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/twofingersspread1.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/twofingersspread2.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/twofingersspread3.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/twofingersspread4.png'>
+              </div>
+              <button type="button" class="btn btn-outline-secondary" name="moreKeyboardButton" style="margin-left: 5px;"value="twofingersspread" id="twofingersspread">more</button>
+              <!-- <div style="display:none; width: 100%" id="fistmore"> -->
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread5.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread6.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread7.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread8.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread9.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread10.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread11.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread12.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread13.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread14.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread15.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread16.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread17.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread18.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread19.png'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread20.jpg'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread21.jpg'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread22.jpg'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread23.jpg'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread24.jpg'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread25.jpg'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread26.jpg'>
+              </div>
+              <div class="hand-div" name="twofingersspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/twofingersspread27.jpg'>
+              </div>
+              <div name="twofingersspread" style="display:none;">
+                <button type="button" class="btn btn-outline-secondary" name="lessKeyboardButton" style="margin-left: 5px;"value="twofingersspread">less</button>
+              </div>
+              <!-- </div> -->
+            </div>
+            <a>Flathand (Four Fingers nonspread)</a>
+            <div class="row handshape-container">
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/flathand1.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/flathand2.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/flathand3.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/flathand4.png'>
+              </div>
+              <button type="button" class="btn btn-outline-secondary" name="moreKeyboardButton" style="margin-left: 5px;"value="flathand" id="flathand">more</button>
+              <!-- <div style="display:none; width: 100%" id="fistmore"> -->
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand5.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand6.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand7.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand8.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand9.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand10.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand11.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand12.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand13.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand14.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand15.png'>
+              </div>
+              <div class="hand-div" name="flathand" style="display:none;">
+                <img class="hand-keyboard" src='/media/flathand16.png'>
+              </div>
+              <div name="flathand" style="display:none;">
+                <button type="button" class="btn btn-outline-secondary" name="lessKeyboardButton" style="margin-left: 5px;"value="flathand">less</button>
+              </div>
+              <!-- </div> -->
+            </div>
+            <a>Four Fingers spread</a>
+            <div class="row handshape-container">
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/fourspread1.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/fourspread2.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/fourspread3.png'>
+              </div>
+              <div class="hand-div">
+                <img class="hand-keyboard" src='/media/fourspread4.png'>
+              </div>
+              <button type="button" class="btn btn-outline-secondary" name="moreKeyboardButton" style="margin-left: 5px;"value="fourspread" id="fourspread">more</button>
+              <!-- <div style="display:none; width: 100%" id="fistmore"> -->
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread5.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread6.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread7.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread8.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread9.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread10.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread11.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread12.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread13.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread14.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread15.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread16.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread17.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread18.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread19.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread20.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread21.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread22.png'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread23.jpg'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread24.jpg'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread25.jpg'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread26.jpg'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread27.jpg'>
+              </div>
+              <div class="hand-div" name="fourspread" style="display:none;">
+                <img class="hand-keyboard" src='/media/fourspread28.jpg'>
+              </div>
+              <div name="fourspread" style="display:none;">
+                <button type="button" class="btn btn-outline-secondary" name="lessKeyboardButton" style="margin-left: 5px;"value="fourspread">less</button>
+              </div>
+              <!-- </div> -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-3" id="automaticAnnotation" style="background-color: white; display: none; padding:0px; ">
+        <div class="" style="height: 85vh; background-color: white; padding: 20px; overflow: scroll">
+          <div style="margin-bottom: 20px;">
+            <a style="text-decoration: inherit; font-size: 15px; color: rgb(150,150,150);"> Automatic annotation</a>
+
+          </div>
+
+          <div class="row justify-content-center" id="automaticAnnotationRow">
+            <div class="card w-80">
+              <div class="card-body">
+                <h5 class="card-title">Signing area</h5>
+                <p class="card-text">This function allows to automatically cut video into segments and creates new tier with recognized segments.</p>
+                <a href="#" id="scissorsButton" style="background-color: rgb(64, 159, 255)" class="btn btn-primary">Run singing area recognition</a>
+              </div>
+            </div>
+            <br>
+            <div class="card w-80">
+              <div class="card-body">
+                <h5 class="card-title">Handshape recognition on segment</h5>
+                <p class="card-text">This function allows to automatically cut video into segments and creates new tier with recognized segments.</p>
+                <a href="#" id="handshapesButton" style="background-color: rgb(64, 159, 255)" class="btn btn-primary">Run handshape recognition</a>
+              </div>
+            </div>
+            <br>
+            <div class="card w-80">
+              <div class="card-body">
+                <h5 class="card-title">Handshape recognition by time</h5>
+                <p class="card-text">This function allows to automatically cut video into segments and creates new tier with recognized segments.</p>
+                <a href="#" style="background-color: rgb(64, 159, 255)" class="btn btn-primary">Run handshape recognition</a>
+              </div>
+            </div>
+
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="optionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Type</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- <a>Type<a> -->
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-check">
+                    <label class="form-check-label" for="exampleRadios1">
+                      <input class="form-check-input" type="radio" name="typeRadios" id="exampleRadios1" value="text" checked>
+                      <img src="/media/text.png" style="width: 100px;" alt="">
+                      <div class="overlay">
+                      </div>
+                      <br>
+                      Text
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <label class="form-check-label" for="exampleRadios2">
+                      <input class="form-check-input" type="radio" name="typeRadios" id="exampleRadios2" value="handshapes">
+                      <img src="/media/handshape.png" style="width: 100px;" alt=""><br>
+                      Handshape
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <br />
+              <!-- <a>Value</a>
+              <input type="text" id="modalValue" name="" value="" placeholder="value"> -->
+          </div>
+          <div class="modal-footer">
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+            <button type="button" id="saveOptions" class="btn btn-primary"  data-dismiss="modal">Choose</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-lg" id="shortcuts" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Keyboard shortcuts</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Command</th>
+                  <th scope="col">Shortcut</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Play/Pause video</td>
+                  <td>Space</td>
+                </tr>
+                <tr>
+                  <td>Add a segment</td>
+                  <td>a</td>
+                </tr>
+                <tr>
+                  <td>Delete a segment (when active and highlighted)</td>
+                  <td>d</td>
+                </tr>
+                <tr>
+                  <td>Increase the extent of right cursor of a segment</td>
+                  <td>L</td>
+                </tr>
+                <tr>
+                  <td>Decrease the extent of right cursor of a segment</td>
+                  <td>Shift + L</td>
+                </tr>
+                <tr>
+                  <td>Increase the extent of left cursor of a segment</td>
+                  <td>K</td>
+                </tr>
+                <tr>
+                  <td>Decrease the extent of left cursor of a segment</td>
+                  <td>Shift + K</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-lg" id="quicktips" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Some quick tips</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul>
+              <li>Add a new parameter to timeline by typing row name and press 'add row' at left bottom.</li>
+              <li>Use 'a' key to add a segment on a timeline</li>
+              <li>Double click on a segment to change a value</li>
+              <li>The edges of the segment are draggable</li>
+              <li>Scroll your mouse to zoom in and out on the subtimeline</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-lg" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Export options</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-4">
+                <div class="card" style="width: 100%;">
+                  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                  <div class="card-body">
+                    <h5 class="card-title">Time based</h5>
+                    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+                  </div>
+                  <div class="card-body">
+                    <a id="exportTimeJson" class="card-link">JSON</a>
+                    <a id="exportTimeXML" class="card-link">XML</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="card" style="width: 100%;">
+                  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                  <div class="card-body">
+                    <h5 class="card-title">Frame based</h5>
+                    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+                  </div>
+                  <div class="card-body">
+                    <a id="exportFrameJson"  class="card-link">JSON</a>
+                    <a id="exportFrameXML" class="card-link">XML</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="card" style="width: 100%;">
+                  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                  <div class="card-body">
+                    <h5 class="card-title">Export for ELAN</h5>
+                    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+                  </div>
+                  <div class="card-body">
+                    <a id="etfexport" class="card-link">Download as .etf</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade bd-example-modal" id="trimvideo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Select maximum 30 sec</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- <source id="source-video" type='video/mp4' > -->
+            <!-- <video style="height: 200px" id="trim-video" src="{% static 'P3_S147_02.mp4' %}" controls="false"></video><br/> -->
+            <!-- <br /> -->
+            <div class="row">
+              <div class="col-6"  style="padding: 10px;">
+                <label for="trim-from">from (in seconds)</label><br />
+                <input type="text" id="select-from" value="">
+              </div>
+              <div class="col-6" style="padding: 10px;">
+                <label for="trim-to">to (in seconds)</label><br />
+                <input type="text" id="select-to" value="">
+              </div>
+            <br />
+
+            </div>
+            <div style="padding-top: 10px;">
+              <button id="trimVideoButton" type="button" class="btn btn-outline-primary" name="button">Annotate selected range</button>
+            </div>
+            <!-- <input type="file" id="uploader"> -->
+            <p id="message"></p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <!-- <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script> -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <!-- <script src="http://canjs.com/release/latest/can.jquery.js"></script>
+    <script src="http://canjs.com/release/latest/can.map.define.js"></script>
+    <script src="http://canjs.com/release/latest/can.stache.js"></script> -->
+
+    <!-- <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script> -->
+
+    <!-- <script src="{% static 'js/ffmpeg-core/ffmpeg-core.js' %}"></script>
+    <script src="{% static 'js/ffmpeg-core/ffmpeg-core.js' %}"></script>
+    <script src="{% static 'js/ffmpeg-core/ffmpeg-core.worker.js' %}"></script> -->
+    <!-- <script type="module" src="{% static 'js/video-player.js' %}"> </script> -->
+    <script type="module" src="{% static 'js/add-video.js' %}"> </script>
+    <script type="module" src="{% static 'js/range.js' %}"> </script>
+    <script type="module" src="{% static 'js/row.js' %}"> </script>
+    <script type="module" src="{% static 'js/keyboard.js' %}"> </script>
+
+    <!-- <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js"  crossorigin="anonymous"></script> -->
+
+
+
+  </body>
+
+</html>

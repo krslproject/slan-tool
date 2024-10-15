@@ -1,0 +1,142 @@
+[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+}
+[type=radio]:hover + img {
+  opacity: 0.3;
+}
+/* CHECKED STYLES */
+[type=radio]:checked  + img {
+  outline: 1px solid black;
+}
+
+[type=radio]:hover .overlay {
+  opacity: 0.5;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #008CBA;
+}
+
+#hand-value {
+  border: 1px solid black;
+  /* box-shadow: 0px 0px 3px; */
+  width:100px;
+  height:100px;
+}
+
+#extended-finger-value {
+    border: 1px solid black;
+      /* box-shadow: 0px 0px 3px; */
+      width: 100px;
+      height: 100px;
+}
+
+#extended-finger-value::after,
+::before {
+  box-sizing: border-box;
+}
+
+
+
+#palm-value {
+  border: 1px solid black;
+  width: 100px;
+  height: 100px;
+}
+
+/* #palm-value::after,
+::before {
+  box-sizing: border-box;
+} */
+
+.hand-keyboard {
+  border: 1px solid black;
+  /* box-shadow: 0px 0px 3px; */
+  /* width:70px; */
+  /* height:70px; */
+  width: 100%;
+    height: auto;
+
+}
+
+.hand-keyboard:active {
+  border: 1px solid blue;
+  /* box-shadow: 0px 0px 1px; */
+}
+
+.hand-keyboard:hover {
+  border: 1px solid blue;
+  /* box-shadow: 0px 0px 3px; */
+}
+
+.palm-key {
+  border: 1px solid black;
+  /* box-shadow: 0px 0px 3px; */
+  /* width:70px; */
+  /* height:70px; */
+  width: 100%;
+  height: auto;
+
+}
+
+.palm-key:active {
+  border: 1px solid blue;
+  /* box-shadow: 0px 0px 1px; */
+}
+
+.palm-key:hover {
+  border: 1px solid blue;
+  /* box-shadow: 0px 0px 3px; */
+}
+
+.view-key {
+  width: 100%;
+  height: auto;
+}
+
+
+.hand-div {
+  padding: 5px;
+  /* width: 80% */
+}
+
+.handshape-container {
+  padding-top:10px;
+  padding-left:10px;
+}
+
+
+.extended-finger-key {
+  width: 100%;
+  height: auto;
+}
+
+.hand-div {
+  width: 23%;
+}
+
+.hand-preview {
+  padding: 5px;
+}
+
+.ef-div {
+  padding: 5px;
+  width: 31%;
+}
